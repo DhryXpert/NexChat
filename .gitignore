@@ -1,0 +1,16 @@
+node_modules/
+.npm/
+
+.env
+.env.*
+!.env.example
+
+
+dist/
+build/
+out/
+
+.cache/
+tmp/
+temp/
+

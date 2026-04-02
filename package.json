@@ -1,0 +1,13 @@
+{
+  "name": "nexchat",
+  "version": "1.0.0",
+  "description": "Premium AI chatbox powered by NVIDIA NIM",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
