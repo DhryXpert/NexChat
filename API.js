@@ -1,7 +1,7 @@
 import OpenAI from 'openai';
 
 const openai = new OpenAI({
-  apiKey: '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',
+  apiKey: process.env.NVIDIA_API_KEY,
   baseURL: 'https://integrate.api.nvidia.com/v1',
 })
 
@@ -14,11 +14,9 @@ async function main() {
     max_tokens: 1024,
     stream: true,
   })
-   
   for await (const chunk of completion) {
     process.stdout.write(chunk.choices[0]?.delta?.content || '')
   }
-  
 }
 
 main();
