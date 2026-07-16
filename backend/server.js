@@ -32,13 +32,14 @@ const allowedOrigins = [
   'http://localhost:3000',
   'http://127.0.0.1:5173',
   process.env.FRONTEND_URL,
-].filter(Boolean).map(url => url.replace(/\/$/, ''));
+].filter(Boolean).map(url => url.trim().replace(/\/$/, ''));
 
 app.use(cors({
   origin: (origin, callback) => {
     // Allow requests with no origin (e.g., curl, Postman, server-to-server)
     if (!origin) return callback(null, true);
     if (allowedOrigins.includes(origin)) return callback(null, true);
+    console.warn(`[CORS] Blocked request from origin: "${origin}". Allowed origins:`, allowedOrigins);
     callback(new Error(`CORS blocked: ${origin}`));
   },
   credentials: true,
