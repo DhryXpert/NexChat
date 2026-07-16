@@ -14,3 +14,11 @@ out/
 tmp/
 temp/
 
+# Vite
+frontend/node_modules/
+frontend/dist/
+
+# Backend
+backend/node_modules/
+
+# Old root-level files (kept for reference)

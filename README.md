@@ -1,52 +1,18 @@
-# NexChat 🤖
+# NexChat — Fullstack AI Chatbox 🤖
 
-A premium AI chatbox built with vanilla HTML, CSS & JavaScript — powered by **NVIDIA NIM** free API.
-
-> **Learning project** — designed for a future React upgrade and Netlify deployment.
+A premium, fullstack AI chatbox built with **React (Vite)** on the frontend, a **Node.js/Express** backend, and powered by **NVIDIA NIM** API and **Firebase** (Auth & Firestore).
 
 ---
 
 ## Features
 
-- 🎨 **Dark premium UI** — Glassmorphism, violet-cyan gradients, micro-animations
-- 💬 **Multi-chat** — Create, switch, and manage multiple conversation threads
-- 🔄 **Streaming responses** — Real-time token-by-token display
-- 📝 **Markdown rendering** — Code blocks, bold, lists, and more
-- 💾 **LocalStorage** — All chats & settings persisted (Netlify-ready)
-- 📱 **Responsive** — Full mobile support with collapsible sidebar
-- ⌨️ **Keyboard shortcuts** — `Enter` send, `Ctrl+N` new chat, `Ctrl+B` sidebar
-
----
-
-## Quick Start
-
-### 1. Get a Free NVIDIA API Key
-
-1. Go to [build.nvidia.com](https://build.nvidia.com/)
-2. Sign in (or create a free account)
-3. Navigate to **API Keys** → **Create API Key**
-4. Copy the key (starts with `nvapi-`)
-
-### 2. Run Locally
-
-Since this is a pure static app using ES Modules, you need a local HTTP server (not `file://`):
-
-```bash
-# Option A: VS Code Live Server (recommended)
-# Right-click index.html → "Open with Live Server"
-
-# Option B: npx serve
-npx serve .
-
-# Option C: Python
-python -m http.server 8080
-```
-
-Then open `http://localhost:PORT` in your browser.
-
-### 3. Enter Your API Key
-
-On first launch, the Settings modal opens automatically. Paste your `nvapi-` key and click **Save Settings**.
+- 🎨 **Dark Premium UI** — Sleek Glassmorphism, violet-cyan gradient theme, micro-animations.
+- 🔐 **Firebase Authentication** — Sign up & log in with Email/Password or **Sign in with Google**.
+- ☁️ **Cloud Firestore Database** — Chat conversations and message history are synced in real-time and persisted securely in the cloud.
+- 🔄 **Real-Time Streaming** — Server-Sent Events (SSE) stream responses token-by-token.
+- 📝 **Markdown rendering** — Handles code blocks (with copy-to-clipboard buttons), bold/italic text, links, lists, and line breaks.
+- 🔒 **Secure API Keys** — The NVIDIA API key is kept securely on the backend, preventing client-side exposure.
+- ⌨️ **Keyboard shortcuts** — `Enter` to send, `Ctrl+N` for a new chat, `Ctrl+B` to toggle sidebar, and `Esc` to close modals.
 
 ---
 
@@ -54,61 +20,86 @@ On first launch, the Settings modal opens automatically. Paste your `nvapi-` key
 
 ```
 NexChat/
-├── index.html          # App shell
-├── css/
-│   └── styles.css      # Design system + all component styles
-├── js/
-│   ├── app.js          # Main controller & event wiring
-│   ├── api.js          # NVIDIA NIM API (browser fetch + streaming)
-│   ├── chat.js         # Chat logic, message rendering, sidebar
-│   ├── storage.js      # LocalStorage persistence (Netlify-ready)
-│   └── ui.js           # Toast, markdown, copy, animations
-├── assets/
-│   └── logo.svg        # App logo
-└── API.js              # Original Node.js API reference
+├── backend/                          # Express API
+│   ├── server.js                     # Main server entry with Firebase Admin
+│   ├── middleware/auth.js            # Firebase ID token verification middleware
+│   ├── routes/completions.js         # Upstream NVIDIA NIM streaming proxy
+│   └── package.json                  # Backend dependencies
+│
+├── frontend/                         # React Frontend (Vite)
+│   ├── src/
+│   │   ├── main.jsx                  # React application entry
+│   │   ├── App.jsx                   # Layout & State orchestration
+│   │   ├── firebase.js               # Firebase Client initialization
+│   │   ├── contexts/AuthContext.jsx  # Context providing Auth actions & State
+│   │   ├── hooks/
+│   │   │   ├── useChats.js           # Firestore subscription & CRUD hook
+│   │   │   └── useStream.js          # SSE completions streaming hook
+│   │   ├── components/               # Subcomponents (Auth, Sidebar, Chat, Settings)
+│   │   └── index.css                 # Global stylesheets & design tokens
+│   └── package.json                  # Frontend dependencies
+│
+├── package.json                      # Monorepo controller config
+└── README.md                         # This file
 ```
 
 ---
 
-## Deploy to Netlify
+## Getting Started
 
-1. Push this folder to a GitHub repository
-2. Go to [app.netlify.com](https://app.netlify.com/) → **Add new site** → **Import from Git**
-3. Set **Publish directory**: `/` (root)
-4. Click **Deploy** — done! ✅
+### 1. Setup Environment Variables
 
-> **Note:** Each user's chats are stored privately in their own browser (LocalStorage). No database needed.
+#### Backend (`/backend/.env`)
+Create a `.env` file in the `backend/` directory:
+```env
+PORT=3000
+NVIDIA_API_KEY=your_nvidia_api_key_here
 
----
+# Firebase Admin Credentials
+FIREBASE_PROJECT_ID=your_firebase_project_id
+FIREBASE_CLIENT_EMAIL=your_service_account_email
+FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
 
-## Available Models (Free Tier)
+# Allowed CORS Origin
+FRONTEND_URL=http://localhost:5173
+```
 
-| Model | Speed | Best For |
-|-------|-------|----------|
-| `google/gemma-7b` | ⚡ Fast | General chat, quick answers |
-| `meta/llama-3.1-8b-instruct` | ⚡ Fast | Instructions, reasoning |
-| `meta/llama-3.1-70b-instruct` | 🐢 Slower | Complex tasks, long reasoning |
-| `mistralai/mistral-7b-instruct-v0.3` | ⚡ Fast | Code, analysis |
-
----
-
-## Keyboard Shortcuts
-
-| Shortcut | Action |
-|----------|--------|
-| `Enter` | Send message |
-| `Shift+Enter` | New line in input |
-| `Ctrl+N` | New chat |
-| `Ctrl+B` | Toggle sidebar |
-| `Escape` | Close modal / sidebar |
+#### Frontend (`/frontend/.env`)
+The Firebase configuration is hardcoded in `frontend/src/firebase.js` using your web app credentials. Ensure `VITE_BACKEND_URL` is set:
+```env
+VITE_BACKEND_URL=http://localhost:3000
+```
 
 ---
 
-## Future — React Upgrade
+## Development
 
-The code is structured for easy React migration:
+Install all dependencies for both directories and run the application concurrently using the monorepo scripts in the root directory:
 
-- `js/api.js` → `hooks/useNvidiaChat.js`
-- `js/storage.js` → Zustand store + Supabase
-- `js/chat.js` → `components/ChatManager.jsx`
-- `css/styles.css` → CSS Modules or styled-components
+```bash
+# Install all dependencies across the project
+npm run install:all
+
+# Run both frontend & backend concurrently
+npm run dev
+```
+
+- **Frontend**: Runs on [http://localhost:5173](http://localhost:5173)
+- **Backend**: Runs on [http://localhost:3000](http://localhost:3000)
+
+---
+
+## Deployment
+
+### Backend (Render Web Service)
+1. Add a new **Web Service** on Render.
+2. Set **Root Directory** to `backend`.
+3. Set **Build Command** to `npm install`.
+4. Set **Start Command** to `node server.js`.
+5. Add the necessary backend environment variables.
+
+### Frontend (Vercel Static)
+1. Import repository to Vercel.
+2. Select **Root Directory** as `frontend`.
+3. Use the **Vite** preset (Vercel autodetects it).
+4. Set the `VITE_BACKEND_URL` environment variable pointing to your deployed backend URL.
