@@ -1,18 +1,32 @@
-# NexChat — Fullstack AI Chatbox 🤖
+# 🌌 NexChat — Fullstack AI Chatbot
 
-A premium, fullstack AI chatbox built with **React (Vite)** on the frontend, a **Node.js/Express** backend, and powered by **NVIDIA NIM** API and **Firebase** (Auth & Firestore).
+<div align="center">
+
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white)
+![Express](https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white)
+![NVIDIA NIM](https://img.shields.io/badge/NVIDIA%20NIM-76B900?style=for-the-badge&logo=nvidia&logoColor=white)
+![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
+
+**A high-performance, premium AI chat client featuring real-time streaming, secure server proxying, and cloud-synced conversation history.**
+
+[🚀 Live Demo](https://nex-chat-v1.vercel.app/) · [🔗 Backend API](https://nexchat-sfgt.onrender.com/)
+
+</div>
 
 ---
 
-## Features
+## ✨ Key Features
 
-- 🎨 **Dark Premium UI** — Sleek Glassmorphism, violet-cyan gradient theme, micro-animations.
-- 🔐 **Firebase Authentication** — Sign up & log in with Email/Password or **Sign in with Google**.
-- ☁️ **Cloud Firestore Database** — Chat conversations and message history are synced in real-time and persisted securely in the cloud.
-- 🔄 **Real-Time Streaming** — Server-Sent Events (SSE) stream responses token-by-token.
-- 📝 **Markdown rendering** — Handles code blocks (with copy-to-clipboard buttons), bold/italic text, links, lists, and line breaks.
-- 🔒 **Secure API Keys** — The NVIDIA API key is kept securely on the backend, preventing client-side exposure.
-- ⌨️ **Keyboard shortcuts** — `Enter` to send, `Ctrl+N` for a new chat, `Ctrl+B` to toggle sidebar, and `Esc` to close modals.
+*   🎨 **Premium Dark Aesthetics** — Sleek glassmorphic components, fluid violet-to-cyan neon gradient accents, and responsive micro-animations.
+*   🔐 **Dual Auth Flow** — Secure user authentication powered by Firebase Client, with support for standard Email/Password and **One-Click Google Sign-In**.
+*   ☁️ **Cloud Persisted Syncing** — Real-time Firestore sync binds conversations and message histories under private, user-specific partitions.
+*   🔄 **Token-by-Token Streaming** — Leverages Server-Sent Events (SSE) to stream responses from NVIDIA's API instantly.
+*   ⚡ **Intelligent Keep-Alive** — Integrated cache-busting, zero-cache health monitors keep Render server instances awake on user mount/login.
+*   📝 **Rich Markdown Support** — Built-in rendering of code blocks (complete with copy-to-clipboard actions), standard formatting, links, and lists.
+*   🛡️ **Backend Token Protection** — Secure request proxy hides the NVIDIA API keys entirely from client access.
+*   ⌨️ **Power-User Shortcuts** — Navigation shortcuts like `Ctrl+N` (New Chat), `Ctrl+B` (Toggle Sidebar), and `Esc` (Close Modals) for a desktop-class experience.
 
 ---
 
