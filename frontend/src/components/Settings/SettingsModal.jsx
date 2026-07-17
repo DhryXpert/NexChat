@@ -53,12 +53,8 @@ export default function SettingsModal({ isOpen, settings, onSave, onClose, onCle
           {/* Model Selection */}
           <div className="field">
             <label className="field__label" htmlFor="settings-model">Model</label>
-            <select id="settings-model" value={model} onChange={(e) => setModel(e.target.value)}>
-              <option value="google/gemma-2-2b-it">Gemma 2 2B IT (Default)</option>
-              <option value="meta/llama-3.1-8b-instruct">Llama 3.1 8B Instruct (Recommended)</option>
-              <option value="meta/llama-3.1-70b-instruct">Llama 3.1 70B Instruct (Most Powerful)</option>
-              <option value="mistralai/mistral-7b-instruct-v0.3">Mistral 7B Instruct</option>
-              <option value="google/gemma-7b">Gemma 7B (Basic)</option>
+            <select id="settings-model" value={model} onChange={(e) => setModel(e.target.value)} disabled>
+              <option value="NVIDIA/">NVIDIA</option>
             </select>
           </div>
 

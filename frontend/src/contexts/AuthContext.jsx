@@ -28,28 +28,48 @@ export function AuthProvider({ children }) {
     const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000';
     let active = true;
     let timeoutId = null;
-
-    // If it doesn't respond in 1.5s, mark it as waking up
-    timeoutId = setTimeout(() => {
-      if (active) {
-        setServerStatus('waking');
-      }
-    }, 1500);
+    let retryCount = 0;
+    const maxWakingRetries = 12; // 12 * 5s = 60s of waking status before showing error
 
     const checkHealth = async () => {
+      // Only set the initial waking timer on the first check to avoid resetting/jumping state
+      if (retryCount === 0) {
+        timeoutId = setTimeout(() => {
+          if (active) setServerStatus('waking');
+        }, 1500);
+      }
+
       try {
-        const res = await fetch(`${BACKEND_URL}/health`);
+        // Cache-busting and no-store headers to force Render to receive the request
+        const res = await fetch(`${BACKEND_URL}/health?t=${Date.now()}`, {
+          cache: 'no-store',
+          headers: {
+            'Pragma': 'no-cache',
+            'Cache-Control': 'no-cache',
+          },
+        });
+
         if (!res.ok) throw new Error('Health check non-ok status');
+        
         if (active) {
-          clearTimeout(timeoutId);
+          if (timeoutId) clearTimeout(timeoutId);
           setServerStatus('ready');
         }
       } catch (err) {
         console.warn('Backend health check failed:', err);
         if (active) {
-          clearTimeout(timeoutId);
-          setServerStatus('error');
-          // Retry after 5s to check again/wake up
+          if (timeoutId) clearTimeout(timeoutId);
+
+          retryCount++;
+          // Keep showing 'waking' during Render's typical boot timeframe (60s)
+          // only drop to 'error' (offline) if it fails consistently beyond that
+          if (retryCount >= maxWakingRetries) {
+            setServerStatus('error');
+          } else {
+            setServerStatus('waking');
+          }
+
+          // Retry check after 5 seconds to continue wake-up process
           setTimeout(() => {
             if (active) checkHealth();
           }, 5000);
@@ -61,9 +81,9 @@ export function AuthProvider({ children }) {
 
     return () => {
       active = false;
-      clearTimeout(timeoutId);
+      if (timeoutId) clearTimeout(timeoutId);
     };
-  }, []);
+  }, [user]);
 
   const signUp = async (email, password, displayName) => {
     const cred = await createUserWithEmailAndPassword(auth, email, password);

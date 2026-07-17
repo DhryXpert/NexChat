@@ -38,7 +38,9 @@ export default function App() {
   const [settings, setSettings] = useState(() => {
     try {
       const saved = localStorage.getItem('nexchat_settings');
-      return saved ? { ...DEFAULT_SETTINGS, ...JSON.parse(saved) } : { ...DEFAULT_SETTINGS };
+      const parsed = saved ? JSON.parse(saved) : {};
+      parsed.model = 'google/gemma-2-2b-it'; // Force default model
+      return { ...DEFAULT_SETTINGS, ...parsed };
     } catch {
       return { ...DEFAULT_SETTINGS };
     }
@@ -70,8 +72,9 @@ export default function App() {
 
   // ── Save settings to localStorage ──
   const handleSaveSettings = useCallback((newSettings) => {
-    setSettings(newSettings);
-    localStorage.setItem('nexchat_settings', JSON.stringify(newSettings));
+    const sanitized = { ...newSettings, model: 'google/gemma-2-2b-it' };
+    setSettings(sanitized);
+    localStorage.setItem('nexchat_settings', JSON.stringify(sanitized));
   }, []);
 
   // ── Chat Management ──
