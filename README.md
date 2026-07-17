@@ -11,7 +11,7 @@
 
 **A high-performance, premium AI chat client featuring real-time streaming, secure server proxying, and cloud-synced conversation history.**
 
-[🚀 Live Demo](https://nex-chat-v1.vercel.app/) · [🔗 Backend API](https://nexchat-sfgt.onrender.com/)
+[🚀 Live Demo](https://nex-chat-v1.vercel.app/)
 
 </div>
 
