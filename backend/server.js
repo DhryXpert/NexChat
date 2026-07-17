@@ -6,14 +6,11 @@ const admin = require('firebase-admin');
 const authMiddleware = require('./middleware/auth');
 const completionsRouter = require('./routes/completions');
 
-// ── Firebase Admin Init ─────────────────────────────────────────────────────
 const firebaseConfig = {
   projectId: process.env.FIREBASE_PROJECT_ID,
   clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
   privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
 };
-
-// Only initialize if credentials are provided (skip in dev if needed)
 if (firebaseConfig.projectId && firebaseConfig.clientEmail && firebaseConfig.privateKey) {
   admin.initializeApp({
     credential: admin.credential.cert(firebaseConfig),
@@ -22,11 +19,7 @@ if (firebaseConfig.projectId && firebaseConfig.clientEmail && firebaseConfig.pri
 } else {
   console.warn('[Firebase] Admin credentials not found — auth middleware will be skipped in dev');
 }
-
-// ── Express App ─────────────────────────────────────────────────────────────
 const app = express();
-
-// CORS — allow the frontend origin
 const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:3000',
@@ -36,7 +29,6 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: (origin, callback) => {
-    // Allow requests with no origin (e.g., curl, Postman, server-to-server)
     if (!origin) return callback(null, true);
     if (allowedOrigins.includes(origin)) return callback(null, true);
     console.warn(`[CORS] Blocked request from origin: "${origin}". Allowed origins:`, allowedOrigins);
@@ -56,12 +48,7 @@ app.use('/api/chat', authGuard, completionsRouter);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log('');
-  // console.log('  ╔══════════════════════════════════════════╗');
-  console.log('  ║   NexChat Backend is running!             ║');
-  console.log(`  ║   → http://localhost:${PORT}                ║`);
-  console.log('  ╚══════════════════════════════════════════╝');
-  console.log('');
-  console.log(`  CORS origins: ${allowedOrigins.join(', ')}`);
-  console.log('  Press Ctrl+C to stop.\n');
+  console.log('NexChat Backend is running!');
+  console.log(`http://localhost:${PORT}`);
+  console.log(`CORS origins: ${allowedOrigins.join(', ')}`);
 });

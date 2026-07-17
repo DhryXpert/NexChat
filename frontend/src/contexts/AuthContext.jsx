@@ -29,22 +29,19 @@ export function AuthProvider({ children }) {
     let active = true;
     let timeoutId = null;
     let retryCount = 0;
-    const maxWakingRetries = 12; // 12 * 5s = 60s of waking status before showing error
+    const maxWakingRetries = 12; // 12 * 5 = 60
 
     const checkHealth = async () => {
-      // Only set the initial waking timer on the first check to avoid resetting/jumping state
       if (retryCount === 0) {
         timeoutId = setTimeout(() => {
           if (active) setServerStatus('waking');
         }, 1500);
       }
 
-      // Create an AbortController for a 8-second request timeout to prevent hanging on Brave
       const controller = new AbortController();
       const fetchTimeoutId = setTimeout(() => controller.abort(), 8000);
 
       try {
-        // Switch to POST to bypass browser and CDN caching without query parameters
         const res = await fetch(`${BACKEND_URL}/health`, {
           method: 'POST',
           signal: controller.signal,

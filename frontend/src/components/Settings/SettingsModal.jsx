@@ -1,7 +1,13 @@
-import { useState, useEffect } from 'react';
-import { Settings, Trash2 } from 'lucide-react';
+import { useState, useEffect } from "react";
+import { Settings, Trash2 } from "lucide-react";
 
-export default function SettingsModal({ isOpen, settings, onSave, onClose, onClearChats }) {
+export default function SettingsModal({
+  isOpen,
+  settings,
+  onSave,
+  onClose,
+  onClearChats,
+}) {
   const [model, setModel] = useState(settings.model);
   const [temperature, setTemperature] = useState(settings.temperature);
   const [topP, setTopP] = useState(settings.topP);
@@ -23,7 +29,7 @@ export default function SettingsModal({ isOpen, settings, onSave, onClose, onCle
   };
 
   const handleClear = () => {
-    if (window.confirm('Delete ALL conversations? This cannot be undone.')) {
+    if (window.confirm("Delete ALL conversations? This cannot be undone.")) {
       onClearChats();
       onClose();
     }
@@ -38,23 +44,42 @@ export default function SettingsModal({ isOpen, settings, onSave, onClose, onCle
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
-      onClick={(e) => { if (e.target.id === 'settings-modal') onClose(); }}
+      onClick={(e) => {
+        if (e.target.id === "settings-modal") onClose();
+      }}
     >
       <div className="modal">
         <div className="modal__header">
-          <h2 className="modal__title" id="modal-title" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <h2
+            className="modal__title"
+            id="modal-title"
+            style={{ display: "flex", alignItems: "center", gap: "8px" }}
+          >
             <Settings size={18} />
             <span>Settings</span>
           </h2>
-          <button className="modal__close" onClick={onClose} aria-label="Close settings">✕</button>
+          <button
+            className="modal__close"
+            onClick={onClose}
+            aria-label="Close settings"
+          >
+            ✕
+          </button>
         </div>
 
         <div className="modal__body">
           {/* Model Selection */}
           <div className="field">
-            <label className="field__label" htmlFor="settings-model">Model</label>
-            <select id="settings-model" value={model} onChange={(e) => setModel(e.target.value)} disabled>
-              <option value="google/gemma-2-2b-it">NVIDIA</option>
+            <label className="field__label" htmlFor="settings-model">
+              Model
+            </label>
+            <select
+              id="settings-model"
+              value={model}
+              onChange={(e) => setModel(e.target.value)}
+              disabled
+            >
+              <option value="NVIDIA/">NVIDIA</option>
             </select>
           </div>
 
@@ -62,25 +87,47 @@ export default function SettingsModal({ isOpen, settings, onSave, onClose, onCle
           <div className="field">
             <label className="field__label">Temperature</label>
             <div className="slider-row">
-              <input type="range" min="0" max="1" step="0.1" value={temperature} onChange={(e) => setTemperature(parseFloat(e.target.value))} />
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.1"
+                value={temperature}
+                onChange={(e) => setTemperature(parseFloat(e.target.value))}
+              />
               <span className="slider-value">{temperature.toFixed(1)}</span>
             </div>
-            <span className="field__sub">Lower = more focused & factual · Higher = more creative</span>
+            <span className="field__sub">
+              Lower = more focused & factual · Higher = more creative
+            </span>
           </div>
 
           {/* Top P */}
           <div className="field">
             <label className="field__label">Top P</label>
             <div className="slider-row">
-              <input type="range" min="0.1" max="1" step="0.1" value={topP} onChange={(e) => setTopP(parseFloat(e.target.value))} />
+              <input
+                type="range"
+                min="0.1"
+                max="1"
+                step="0.1"
+                value={topP}
+                onChange={(e) => setTopP(parseFloat(e.target.value))}
+              />
               <span className="slider-value">{topP.toFixed(1)}</span>
             </div>
           </div>
 
           {/* Max Tokens */}
           <div className="field">
-            <label className="field__label" htmlFor="settings-max-tokens">Max Tokens</label>
-            <select id="settings-max-tokens" value={maxTokens} onChange={(e) => setMaxTokens(parseInt(e.target.value))}>
+            <label className="field__label" htmlFor="settings-max-tokens">
+              Max Tokens
+            </label>
+            <select
+              id="settings-max-tokens"
+              value={maxTokens}
+              onChange={(e) => setMaxTokens(parseInt(e.target.value))}
+            >
               <option value={512}>512 — Short responses</option>
               <option value={1024}>1024 — Balanced</option>
               <option value={2048}>2048 — Long responses</option>
@@ -90,7 +137,9 @@ export default function SettingsModal({ isOpen, settings, onSave, onClose, onCle
 
           {/* System Prompt */}
           <div className="field">
-            <label className="field__label" htmlFor="settings-system-prompt">System Prompt</label>
+            <label className="field__label" htmlFor="settings-system-prompt">
+              System Prompt
+            </label>
             <textarea
               id="settings-system-prompt"
               placeholder="You are NexChat, a helpful AI assistant."
@@ -102,13 +151,21 @@ export default function SettingsModal({ isOpen, settings, onSave, onClose, onCle
         </div>
 
         <div className="modal__footer">
-          <button className="btn btn--danger" onClick={handleClear} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <button
+            className="btn btn--danger"
+            onClick={handleClear}
+            style={{ display: "flex", alignItems: "center", gap: "6px" }}
+          >
             <Trash2 size={14} />
             <span>Clear All Chats</span>
           </button>
-          <div style={{ display: 'flex', gap: '10px' }}>
-            <button className="btn btn--ghost" onClick={onClose}>Cancel</button>
-            <button className="btn btn--primary" onClick={handleSave}>Save Settings</button>
+          <div style={{ display: "flex", gap: "10px" }}>
+            <button className="btn btn--ghost" onClick={onClose}>
+              Cancel
+            </button>
+            <button className="btn btn--primary" onClick={handleSave}>
+              Save Settings
+            </button>
           </div>
         </div>
       </div>
