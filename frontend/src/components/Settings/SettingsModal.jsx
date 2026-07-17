@@ -54,7 +54,7 @@ export default function SettingsModal({ isOpen, settings, onSave, onClose, onCle
           <div className="field">
             <label className="field__label" htmlFor="settings-model">Model</label>
             <select id="settings-model" value={model} onChange={(e) => setModel(e.target.value)} disabled>
-              <option value="NVIDIA/">NVIDIA</option>
+              <option value="google/gemma-2-2b-it">NVIDIA</option>
             </select>
           </div>
 

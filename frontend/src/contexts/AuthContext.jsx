@@ -39,15 +39,19 @@ export function AuthProvider({ children }) {
         }, 1500);
       }
 
+      // Create an AbortController for a 8-second request timeout to prevent hanging on Brave
+      const controller = new AbortController();
+      const fetchTimeoutId = setTimeout(() => controller.abort(), 8000);
+
       try {
-        // Cache-busting and no-store headers to force Render to receive the request
-        const res = await fetch(`${BACKEND_URL}/health?t=${Date.now()}`, {
+        // Switch to POST to bypass browser and CDN caching without query parameters
+        const res = await fetch(`${BACKEND_URL}/health`, {
+          method: 'POST',
+          signal: controller.signal,
           cache: 'no-store',
-          headers: {
-            'Pragma': 'no-cache',
-            'Cache-Control': 'no-cache',
-          },
         });
+
+        clearTimeout(fetchTimeoutId);
 
         if (!res.ok) throw new Error('Health check non-ok status');
         
@@ -56,6 +60,7 @@ export function AuthProvider({ children }) {
           setServerStatus('ready');
         }
       } catch (err) {
+        clearTimeout(fetchTimeoutId);
         console.warn('Backend health check failed:', err);
         if (active) {
           if (timeoutId) clearTimeout(timeoutId);

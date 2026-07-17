@@ -47,23 +47,17 @@ app.use(cors({
 
 app.use(express.json());
 
-// ── Routes ──────────────────────────────────────────────────────────────────
-
-// Health check (no auth required)
-app.get('/health', (_, res) => {
+app.all('/health', (_, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// Chat completions — protected by Firebase Auth
-// In dev without Firebase creds, skip auth middleware
 const authGuard = firebaseConfig.projectId ? authMiddleware : (req, res, next) => next();
 app.use('/api/chat', authGuard, completionsRouter);
 
-// ── Start ───────────────────────────────────────────────────────────────────
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log('');
-  console.log('  ╔══════════════════════════════════════════╗');
+  // console.log('  ╔══════════════════════════════════════════╗');
   console.log('  ║   NexChat Backend is running!             ║');
   console.log(`  ║   → http://localhost:${PORT}                ║`);
   console.log('  ╚══════════════════════════════════════════╝');
